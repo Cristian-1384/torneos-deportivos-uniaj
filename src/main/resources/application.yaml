@@ -1,0 +1,59 @@
+spring:
+  application:
+    name: torneos-deportivos
+  datasource:
+    url: jdbc:postgresql://ep-fancy-wave-b7tjur6v-pooler.c-13.us-east-1.aws.neon.tech/neondb
+    username: neondb_owner
+    password: npg_f7OuqwkjPHV5
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  data:
+    redis:
+      host: innovative-lucent-arm-56652.db.redis.io
+      port: 10436
+      password: sPEk00pIk9i5BrRcsk7c7x8a0ERwJ1yw
+      lettuce:
+        pool:
+          max-active: 10
+          max-idle: 5
+          min-idle: 2
+  batch:
+    job:
+      enabled: false
+    jdbc:
+      # Crea las tablas batch_* en la BD local del taller; cambiar a "never" tras el primer arranque.
+      initialize-schema: always
+  rabbitmq:
+    addresses: amqps://vlpaqsmf:T0V8YIYom9PdQHJ_-NG7KUsEZFNqYTEo@leopard.lmq.cloudamqp.com/vlpaqsmf
+    listener:
+      simple:
+        acknowledge-mode: auto
+        default-requeue-rejected: false
+        retry:
+          enabled: true
+          max-attempts: 3
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
+
+app:
+  security:
+    jwt:
+      secret: cambiar-este-secreto-por-uno-largo-y-seguro-min-256-bits
+      expiration-ms: 3600000
+  messaging:
+    rabbitmq:
+      exchange: torneos-deprotivos.exchange
+      jugadores:
+        queue: torneos-deportivos.jugadores.registro
+        routing-key: jugadores.registro
+  taller:
+    cron: "0 * * * * *" # Se ejecuta cada minuto en el segundo 0
+    zona: "America/Bogota"
